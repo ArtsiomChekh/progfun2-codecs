@@ -1,7 +1,7 @@
 package codecs
 
 import org.scalacheck
-import org.scalacheck.{ Gen, Prop }
+import org.scalacheck.{Gen, Prop}
 import org.scalacheck.Prop.propBoolean
 
 class CodecsSuite
@@ -13,19 +13,21 @@ class CodecsSuite
 
   def checkProperty(prop: Prop): Unit =
     val result = scalacheck.Test.check(scalacheck.Test.Parameters.default, prop)
+
     def fail(labels: Set[String], fallback: String): Nothing =
       if labels.isEmpty then throw AssertionError(fallback)
       else throw AssertionError(labels.mkString(". "))
+
     result.status match
       case scalacheck.Test.Passed | _: scalacheck.Test.Proved => ()
-      case scalacheck.Test.Failed(_, labels)                  => fail(labels, "A property failed.")
-      case scalacheck.Test.PropException(_, e, labels)        => fail(labels, s"An exception was thrown during property evaluation: $e.")
-      case scalacheck.Test.Exhausted                          => fail(Set.empty, "Unable to generate data.")
+      case scalacheck.Test.Failed(_, labels) => fail(labels, "A property failed.")
+      case scalacheck.Test.PropException(_, e, labels) => fail(labels, s"An exception was thrown during property evaluation: $e.")
+      case scalacheck.Test.Exhausted => fail(Set.empty, "Unable to generate data.")
 
   /**
-    * Check that a value of an arbitrary type `A` can be encoded and then successfully
-    * decoded with the given pair of encoder and decoder.
-    */
+   * Check that a value of an arbitrary type `A` can be encoded and then successfully
+   * decoded with the given pair of encoder and decoder.
+   */
   def encodeAndThenDecodeProp[A](a: A)(using encA: Encoder[A], decA: Decoder[A]): Prop =
     val maybeDecoded = decA.decode(encA.encode(a))
     maybeDecoded.contains(a) :| s"Encoded value '$a' was not successfully decoded. Got '$maybeDecoded'."
