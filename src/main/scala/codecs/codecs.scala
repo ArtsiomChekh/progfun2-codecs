@@ -77,9 +77,11 @@ trait EncoderInstances:
 
   /** An encoder for `String` values */
   given Encoder[String] =
-    ??? // TODO Implement the `Encoder[String]` instance
+    Encoder.fromFunction(s => Json.Str(s))
+     // TODO Implement the `Encoder[String]` instance
 
   /** An encoder for `Boolean` values */
+  given Encoder[Boolean] = ???
   // TODO Define a given value of type `Encoder[Boolean]`
 
   /**
