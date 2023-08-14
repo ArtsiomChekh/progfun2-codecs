@@ -197,7 +197,13 @@ trait DecoderInstances:
    */
   given[A](using decoder: Decoder[A]): Decoder[List[A]] =
   Decoder.fromFunction {
-    ???
+    case Json.Arr(array) =>
+      val decoded = array.flatMap(decoder.decode)
+      if (decoded.length == array.length)
+        Some(decoded)
+      else
+        None
+    case _ => None
   }
 
   /**
@@ -205,8 +211,10 @@ trait DecoderInstances:
    * the supplied `name` using the given `decoder`.
    */
   def field[A](name: String)(using decoder: Decoder[A]): Decoder[A] =
-    ???
-
+    Decoder.fromFunction {
+      case Json.Obj(obj) => decoder.decode(obj(name))
+      case _ => None
+    }
 
 case class Person(name: String, age: Int)
 

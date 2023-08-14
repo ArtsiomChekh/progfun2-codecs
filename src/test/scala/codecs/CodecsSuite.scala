@@ -43,6 +43,11 @@ class CodecsSuite
     assert(decoded.isEmpty, "decoding 4.2 as an integer value should fail")
   }
 
+  test("Fails to decode non-integer JSON value") {
+    val decoded = given_Decoder_Int.decode(Json.Num(3.12))
+    assert(decoded.isEmpty)
+  }
+
   test("a 'String' value should be encoded as a JSON string (1pt)") {
     assert(implicitly[Encoder[String]].encode("foo") == Json.Str("foo"))
   }
@@ -76,6 +81,14 @@ class CodecsSuite
     val json = Json.Obj(Map("name" -> Json.Str("Alice"), "age" -> Json.Num(42)))
     val encoder = implicitly[Encoder[Person]]
     assert(encoder.encode(person) == json)
+  }
+
+  test("Decodes field from JSON object") {
+    val json = Json.Obj(Map("name" -> Json.Str("Alice"), "age" -> Json.Num(42)))
+    val decoder = Decoder.field[Int]("age")
+    val result = decoder.decode(json)
+
+    assertEquals(result, Some(42))
   }
 
   test("it is possible to encode and decode people (4pts)") {
