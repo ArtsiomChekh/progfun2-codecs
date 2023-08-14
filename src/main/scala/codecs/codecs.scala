@@ -81,7 +81,8 @@ trait EncoderInstances:
      // TODO Implement the `Encoder[String]` instance
 
   /** An encoder for `Boolean` values */
-  given Encoder[Boolean] = ???
+  given Encoder[Boolean] =
+    Encoder.fromFunction(b => Json.Bool(b))
   // TODO Define a given value of type `Encoder[Boolean]`
 
   /**
