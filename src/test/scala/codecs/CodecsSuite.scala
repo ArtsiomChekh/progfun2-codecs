@@ -91,6 +91,7 @@ class CodecsSuite
     assertEquals(result, Some(42))
   }
 
+
   test("it is possible to encode and decode people (4pts)") {
     checkProperty(Prop.forAll((s: String, x: Int) => encodeAndThenDecodeProp(Person(s, x))))
   }

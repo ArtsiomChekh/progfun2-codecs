@@ -230,7 +230,9 @@ trait PersonCodecs:
 
   /** The corresponding decoder for `Person` */
   given Decoder[Person] =
-  ???
+  Decoder.field[String]("name")
+    .zip(Decoder.field[Int]("age"))
+    .transform[Person](user => Person(user._1, user._2))
 
 
 case class Contacts(people: List[Person])
