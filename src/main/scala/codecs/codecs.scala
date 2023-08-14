@@ -181,9 +181,13 @@ trait DecoderInstances:
   // TODO Define a given value of type `Decoder[Int]`
 
   /** A decoder for `String` values */
+  given Decoder[String] =
+  Decoder.fromPartialFunction { case Json.Str(s) => s }
   // TODO Define a given value of type `Decoder[String]`
 
   /** A decoder for `Boolean` values */
+  given Decoder[Boolean] =
+  Decoder.fromPartialFunction { case Json.Bool(b) => b }
   // TODO Define a given value of type `Decoder[Boolean]`
 
   /**
