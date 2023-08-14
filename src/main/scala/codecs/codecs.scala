@@ -271,4 +271,3 @@ object Main:
     println(maybeJsonObj.flatMap(_.decodeAs[Person]))
     println(maybeJsonObj2.flatMap(_.decodeAs[Person]))
     println(renderJson(Person("Bob", 66)))
-
