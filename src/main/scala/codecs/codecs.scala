@@ -199,10 +199,7 @@ trait DecoderInstances:
   Decoder.fromFunction {
     case Json.Arr(array) =>
       val decoded = array.flatMap(decoder.decode)
-      if (decoded.length == array.length)
-        Some(decoded)
-      else
-        None
+      Option.when(decoded.length == array.length)(decoded)
     case _ => None
   }
 
